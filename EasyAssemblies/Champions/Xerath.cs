@@ -81,7 +81,7 @@ namespace EasyAssemblies.Champions
             MenuService.AddBool("Misc_r", "Use R charges when ult is pressed", true);
             MenuService.AddSlider("Misc_r_min_delay", "R min delay between charges", 800, 0, 1500);
             MenuService.AddSlider("Misc_r_max_delay", "R max delay between charges", 1750, 1500, 3000);
-            MenuService.AddSlider("Misc_r_dash", "R delay after flash/dash", 500, 0, 2000);
+            MenuService.AddSlider("Misc_r_dash", "R delay after flash/dash", 1000, 0, 2000);
             MenuService.AddBool("Misc_r_blue", "Use Blue Trinket when ulting", true);
 
             MenuService.End();
@@ -99,8 +99,8 @@ namespace EasyAssemblies.Champions
 
             if (MenuService.BoolLinks["Misc_r"].Value && IsChargingUltimate)
                 CastR();
-            //else
-            //    ResetR();
+            else
+                _rTarget = null;
         }
 
         protected override void Draw()
@@ -217,6 +217,8 @@ namespace EasyAssemblies.Champions
         }
 
         private Obj_AI_Hero _rTarget;
+        private int _rTargetChangedWaitTime;
+        private int _dashWaitTime;
 
         private void CastR()
         {
@@ -235,16 +237,25 @@ namespace EasyAssemblies.Champions
                 _rTarget = target;
             else if(_rTarget.NetworkId != target.NetworkId)
             {
-                //TODO: wait before switching target
+                var time = _rTarget.Distance(target);
+                if (time > 3000) time = 3000;
 
+                _rTargetChangedWaitTime = Utils.TickCount + (int)time;
                 _rTarget = target;
             }
 
-            var canCast = true;
-            var dashWaitTime = 0;
-            if ((Player.LastCastedSpellName().ToLower() == "summonerflash" && Player.LastCastedSpellT() > Utils.TickCount - 100) ||
-                _rTarget.IsDashing())
-                return;
+            if ((Player.LastCastedSpellName().ToLower() == "summonerflash" && Player.LastCastedSpellT() > Utils.TickCount - 100) || _rTarget.IsDashing())
+                _dashWaitTime = Utils.TickCount + dashDelay;
+
+            if (Utils.TickCount >= _rTargetChangedWaitTime &&
+                Utils.TickCount >= _dashWaitTime &&
+                Utils.TickCount >= Player.LastCastedSpellT() + minDelay)
+            {
+                if (R.GetPrediction(_rTarget).Hitchance >= HitChance.VeryHigh)
+                    R.Cast(_rTarget, IsPacketCastEnabled);
+                if (R.GetPrediction(_rTarget).Hitchance >= HitChance.High && Utils.TickCount >= Player.LastCastedSpellT() + maxDelay)
+                    R.Cast(_rTarget, IsPacketCastEnabled);
+            }
 
         }
 
