@@ -183,7 +183,12 @@ namespace EasyAssemblies.Champions
             if (!target.IsValidTarget(E.Range) || target.GetWaypoints().Count == 1)
                 return;
 
-            if (E.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
+            if (E.GetPrediction(target).Hitchance < HitChance.VeryHigh)
+                return;
+
+            if (target.IsFacing(Player) && target.HealthPercent > Player.HealthPercent)
+                E.Cast(target, IsPacketCastEnabled);
+            if (!target.IsFacing(Player) && target.HealthPercent <= Player.HealthPercent)
                 E.Cast(target, IsPacketCastEnabled);
         }
         
