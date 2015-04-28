@@ -14,8 +14,12 @@ namespace EasyAssemblies.Champions
         private Spell E { get; set; }
         private Spell R { get; set; }
 
-        private Items.Item BlueTrinket1 { get; set; }
-        private Items.Item BlueTrinket2 { get; set; }
+        private Items.Item _blueTrinket1;
+        private Items.Item _blueTrinket2;
+
+        private Obj_AI_Hero _rTarget;
+        private int _rTargetChangedWaitTime;
+        private int _dashWaitTime;
 
         private bool IsChargingUltimate
         {
@@ -26,8 +30,8 @@ namespace EasyAssemblies.Champions
         {
             DrawingService.SetDamageIndicator(DrawDamage);
 
-            BlueTrinket1 = ItemData.Scrying_Orb_Trinket.GetItem();
-            BlueTrinket2 = ItemData.Farsight_Orb_Trinket.GetItem();
+            _blueTrinket1 = ItemData.Scrying_Orb_Trinket.GetItem();
+            _blueTrinket2 = ItemData.Farsight_Orb_Trinket.GetItem();
         }
 
         protected override void InitializeSpells()
@@ -216,10 +220,6 @@ namespace EasyAssemblies.Champions
                 .ForEach(enemy => E.Cast(enemy, IsPacketCastEnabled));
         }
 
-        private Obj_AI_Hero _rTarget;
-        private int _rTargetChangedWaitTime;
-        private int _dashWaitTime;
-
         private void CastR()
         {
             if (!R.IsReady())
@@ -286,16 +286,16 @@ namespace EasyAssemblies.Champions
                 if (_rTarget == null)
                     _rTarget = target;
 
-                if ((BlueTrinket1.IsOwned() && BlueTrinket1.IsReady()) || (BlueTrinket2.IsOwned() && BlueTrinket2.IsReady()))
+                if ((_blueTrinket1.IsOwned() && _blueTrinket1.IsReady()) || (_blueTrinket2.IsOwned() && _blueTrinket2.IsReady()))
                 {
-                    if (BlueTrinket1.IsOwned() && BlueTrinket1.IsReady() && (Player.Level >= 9 ? 3500f : BlueTrinket1.Range) >= Player.Distance(_rTarget))
+                    if (_blueTrinket1.IsOwned() && _blueTrinket1.IsReady() && (Player.Level >= 9 ? 3500f : _blueTrinket1.Range) >= Player.Distance(_rTarget))
                     {
-                        BlueTrinket1.Cast(_rTarget.Position);
+                        _blueTrinket1.Cast(_rTarget.Position);
                         Utility.DelayAction.Add(175, () => R.Cast(IsPacketCastEnabled));
                     }
-                    if (BlueTrinket2.IsOwned() && BlueTrinket2.IsReady() && BlueTrinket2.Range >= Player.Distance(_rTarget))
+                    if (_blueTrinket2.IsOwned() && _blueTrinket2.IsReady() && _blueTrinket2.Range >= Player.Distance(_rTarget))
                     {
-                        BlueTrinket2.Cast(_rTarget.Position);
+                        _blueTrinket2.Cast(_rTarget.Position);
                         Utility.DelayAction.Add(175, () => R.Cast(IsPacketCastEnabled));
                     }
                 }
