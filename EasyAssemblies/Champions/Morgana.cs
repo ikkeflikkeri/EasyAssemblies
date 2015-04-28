@@ -34,6 +34,8 @@ namespace EasyAssemblies.Champions
 
             MenuService.AddSubMenu("Auto");
             MenuService.AddBool("Auto_q", "Use Q", false);
+            MenuService.AddBool("Auto_e", "Use E", true);
+            HeroManager.Enemies.ForEach(hero => MenuService.AddBool("Auto_e_" + hero.ChampionName, "Use E on " + hero.ChampionName, true));
 
             MenuService.AddSubMenu("Drawing");
             MenuService.AddBool("Drawing_q", "Q Range", true);
