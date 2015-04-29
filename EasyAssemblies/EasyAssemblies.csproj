@@ -63,6 +63,7 @@
     <Compile Include="Champions\Jinx.cs" />
     <Compile Include="Champions\Morgana.cs" />
     <Compile Include="Champions\Xerath.cs" />
+    <Compile Include="Data\SpellDatabase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BootService.cs" />
