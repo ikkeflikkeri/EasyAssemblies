@@ -27,6 +27,7 @@ namespace EasyAssemblies.Champions
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
             Spellbook.OnCastSpell += OnCastSpell;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
 
             Game.PrintChat("EasyJinx loaded!");
         }
@@ -67,6 +68,7 @@ namespace EasyAssemblies.Champions
         protected virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser) { }
         protected virtual void OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args) { }
         protected virtual void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args) { }
+        protected virtual void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args) { }
 
         ~Champion()
         {
