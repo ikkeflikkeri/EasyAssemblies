@@ -12,9 +12,9 @@ namespace EasyAssemblies.Services
         public static void RenderSkillshotRange(Spell spell, bool minimap = false)
         {
             if(minimap)
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, spell.Range, (spell.IsReady() ? GreenColor : RedColor), 2, true);
+                Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, (spell.IsReady() ? GreenColor : RedColor), 2, 30, true);
             else
-               Render.Circle.DrawCircle(ObjectManager.Player.Position, spell.Range, (spell.IsReady() ? GreenColor : RedColor));
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, spell.Range, (spell.IsReady() ? GreenColor : RedColor));
         }
 
         public static void RenderDamageIndicator(bool enabled)
