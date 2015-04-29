@@ -1,4 +1,7 @@
-﻿using EasyAssemblies.Services;
+﻿using System.Collections.Generic;
+using System.Linq;
+using EasyAssemblies.Data;
+using EasyAssemblies.Services;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -34,8 +37,10 @@ namespace EasyAssemblies.Champions
 
             MenuService.AddSubMenu("Auto");
             MenuService.AddBool("Auto_q", "Use Q", false);
+            MenuService.AddBool("Auto_w", "Use W", true);
             MenuService.AddBool("Auto_e", "Use E", true);
             HeroManager.Enemies.ForEach(hero => MenuService.AddBool("Auto_e_" + hero.ChampionName, "Use E on " + hero.ChampionName, true));
+
 
             MenuService.AddSubMenu("Drawing");
             MenuService.AddBool("Drawing_q", "Q Range", true);
@@ -71,6 +76,11 @@ namespace EasyAssemblies.Champions
             if (MenuService.BoolLinks["Auto_q"].Value) CastQ();
         }
 
+        protected override void Update()
+        {
+            if (MenuService.BoolLinks["Auto_w"].Value) CastW();
+        }
+
         private void CastQ()
         {
             if (!Q.IsReady())
@@ -80,23 +90,37 @@ namespace EasyAssemblies.Champions
             if (!target.IsValidTarget(Q.Range) || target.GetWaypoints().Count == 1)
                 return;
 
-            if (Q.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
+            if (Q.GetPrediction(target).Hitchance >= HitChance.High)
                 Q.Cast(target, IsPacketCastEnabled);
         }
 
         private void CastW()
         {
-            
+            if (!W.IsReady())
+                return;
+
+            HeroManager.Enemies
+                .Where(enemy => enemy.IsValidTarget(W.Range))
+                .Where(enemy => W.GetPrediction(enemy).Hitchance >= HitChance.Immobile).ToList()
+                .ForEach(enemy => W.Cast(enemy, IsPacketCastEnabled));
         }
 
-        private void CastE()
+        protected override void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            
-        }
+            if (sender.Type != Player.Type || !E.IsReady() || !sender.IsEnemy)
+                return;
 
-        private void CastR()
-        {
-            
+            var attacker = HeroManager.Enemies.First(x => x.NetworkId == sender.NetworkId);
+            foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(E.Range, false)))
+            {
+                var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).Normalized() * ally.Distance(args.End);
+                if (detectRange.Distance(ally.ServerPosition) > ally.AttackRange - ally.BoundingRadius)
+                    continue;
+
+                SpellDatabase.DangerousSpells
+                    .Where(spell => spell.ChampionName == attacker.ChampionName && spell.Slot == attacker.GetSpellSlot(args.SData.Name)).ToList()
+                    .ForEach(item => E.CastOnUnit(ally));
+            }
         }
     }
 }
