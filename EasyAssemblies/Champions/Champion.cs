@@ -29,7 +29,7 @@ namespace EasyAssemblies.Champions
             Spellbook.OnCastSpell += OnCastSpell;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
 
-            Game.PrintChat("EasyJinx loaded!");
+            Game.PrintChat("EasyAssemblies - " + Player.ChampionName + " loaded!");
         }
 
         private void OnUpdate(EventArgs args)
