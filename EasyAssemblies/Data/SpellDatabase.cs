@@ -38,6 +38,7 @@ namespace EasyAssemblies.Data
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Braum", Slot = SpellSlot.Q });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Braum", Slot = SpellSlot.R });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Caitlyn", Slot = SpellSlot.E });
+            DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Cassiopeia", Slot = SpellSlot.W });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Cassiopeia", Slot = SpellSlot.R });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Chogath", Slot = SpellSlot.Q });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Chogath", Slot = SpellSlot.W });
