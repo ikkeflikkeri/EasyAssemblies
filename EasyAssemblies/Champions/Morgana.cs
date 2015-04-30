@@ -89,7 +89,7 @@ namespace EasyAssemblies.Champions
                 return;
 
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (!target.IsValidTarget(Q.Range) || target.GetWaypoints().Count == 1)
+            if (!target.IsValidTarget(Q.Range) || target.IsMoving)
                 return;
 
             if (Q.GetPrediction(target).Hitchance >= HitChance.High)

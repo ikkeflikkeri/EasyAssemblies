@@ -156,7 +156,7 @@ namespace EasyAssemblies.Champions
                 return;
 
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-            if (!target.IsValidTarget(R.Range) || target.GetWaypoints().Count == 1)
+            if (!target.IsValidTarget(R.Range) || target.IsMoving)
                 return;
 
             if (R.GetPrediction(target).Hitchance >= HitChance.VeryHigh)

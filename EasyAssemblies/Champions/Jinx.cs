@@ -180,7 +180,7 @@ namespace EasyAssemblies.Champions
                 return;
 
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            if (!target.IsValidTarget(E.Range) || target.GetWaypoints().Count == 1)
+            if (!target.IsValidTarget(E.Range) || target.IsMoving)
                 return;
 
             if (E.GetPrediction(target).Hitchance < HitChance.VeryHigh)
