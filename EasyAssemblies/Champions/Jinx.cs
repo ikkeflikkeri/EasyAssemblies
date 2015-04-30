@@ -101,6 +101,9 @@ namespace EasyAssemblies.Champions
                         Q.Cast(IsPacketCastEnabled);
                 }
             }
+
+            CastEAuto();
+            if (MenuService.BoolLinks["Auto_r"].Value) CastRAuto();
         }
 
         protected override void Combo()
@@ -120,9 +123,6 @@ namespace EasyAssemblies.Champions
 
         protected override void Auto()
         {
-            CastEAuto();
-            if (MenuService.BoolLinks["Auto_r"].Value) CastRAuto();
-
             if (MenuService.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && MenuService.BoolLinks["Misc_q_laneclear"].Value)
                 CastQHarass();
         }
