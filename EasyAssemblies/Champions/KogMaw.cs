@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using EasyAssemblies.Services;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LeagueSharp.Common.Data;
 
 namespace EasyAssemblies.Champions
 {
@@ -25,13 +27,13 @@ namespace EasyAssemblies.Champions
         protected override void InitializeSpells()
         {
             Q = new Spell(SpellSlot.Q, 1000f);
-            W = new Spell(SpellSlot.W, 130f);
+            W = new Spell(SpellSlot.W, 760f);
             E = new Spell(SpellSlot.E, 1200f);
             R = new Spell(SpellSlot.R, 1200f);
 
             Q.SetSkillshot(0.25f, 70f, 1650f, true, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 120f, 1400f, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(1.2f, 120f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            R.SetSkillshot(1.2f, 100f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 
         protected override void InitializeMenu()
@@ -106,7 +108,7 @@ namespace EasyAssemblies.Champions
 
         protected override void Update()
         {
-            if (W.Level > 1) W.Range = 110 + W.Level * 20;
+            if (W.Level > 1) W.Range = 740 + W.Level * 20;
             if (R.Level > 1) R.Range = 900 + R.Level * 300;
 
             if (MenuService.BoolLinks["Auto_r_killsteal"].Value) CastRKillsteal();
@@ -156,7 +158,7 @@ namespace EasyAssemblies.Champions
                 return;
 
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-            if (!target.IsValidTarget(R.Range))
+            if (!target.IsValidTarget(R.Range) || target.GetWaypoints().Count == 1)
                 return;
 
             if (R.GetPrediction(target).Hitchance >= HitChance.VeryHigh)

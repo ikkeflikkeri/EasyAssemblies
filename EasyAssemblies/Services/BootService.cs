@@ -1,4 +1,5 @@
-﻿using EasyAssemblies.Champions;
+﻿using System;
+using EasyAssemblies.Champions;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -11,16 +12,16 @@ namespace EasyAssemblies.Services
             CustomEvents.Game.OnGameLoad += Loading;
         }
 
-        private static void Loading(System.EventArgs args)
+        private static void Loading(EventArgs args)
         {
             Champion champion = null;
 
             switch (ObjectManager.Player.ChampionName)
             {
                 case "Jinx": champion = new Jinx(); break;
-                case "Xerath": champion = new Xerath(); break;
-                case "Morgana": champion = new Morgana(); break;
                 case "KogMaw": champion = new KogMaw(); break;
+                case "Morgana": champion = new Morgana(); break;
+                case "Xerath": champion = new Xerath(); break;
             }
 
             if (champion != null)
