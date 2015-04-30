@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Champions\Champion.cs" />
     <Compile Include="Champions\Jinx.cs" />
+    <Compile Include="Champions\KogMaw.cs" />
     <Compile Include="Champions\Morgana.cs" />
     <Compile Include="Champions\Xerath.cs" />
     <Compile Include="Data\SpellDatabase.cs" />
