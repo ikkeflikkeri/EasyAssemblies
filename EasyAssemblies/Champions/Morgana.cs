@@ -37,8 +37,10 @@ namespace EasyAssemblies.Champions
 
             MenuService.AddSubMenu("Auto");
             MenuService.AddBool("Auto_q", "Use Q", false);
+            MenuService.AddBool("Auto_q_slow", "Use Q on slowed enemies", true);
+            MenuService.AddBool("Auto_q_stun", "Use Q on stunned enemies", true);
+            MenuService.AddBool("Auto_q_gap", "Use Q on gapcloser", true);
             MenuService.AddBool("Auto_w", "Use W", true);
-            MenuService.AddBool("Auto_e", "Use E", true);
             HeroManager.Enemies.ForEach(hero => MenuService.AddBool("Auto_e_" + hero.ChampionName, "Use E on " + hero.ChampionName, true));
 
 
@@ -78,6 +80,7 @@ namespace EasyAssemblies.Champions
 
         protected override void Update()
         {
+            CastQAuto();
             if (MenuService.BoolLinks["Auto_w"].Value) CastW();
         }
 
@@ -92,6 +95,21 @@ namespace EasyAssemblies.Champions
 
             if (Q.GetPrediction(target).Hitchance >= HitChance.High)
                 Q.Cast(target, IsPacketCastEnabled);
+        }
+
+        private void CastQAuto()
+        {
+            if (!Q.IsReady())
+                return;
+
+            var slow = MenuService.BoolLinks["Auto_q_slow"].Value;
+            var stun = MenuService.BoolLinks["Auto_q_stun"].Value;
+
+            HeroManager.Enemies
+                .Where(enemy => enemy.IsValidTarget(Q.Range))
+                .Where(enemy => (stun && enemy.HasBuffOfType(BuffType.Stun)) || (slow && enemy.HasBuffOfType(BuffType.Slow) && enemy.GetWaypoints().Count > 1))
+                .Where(enemy => Q.GetPrediction(enemy).Hitchance >= HitChance.High).ToList()
+                .ForEach(enemy => Q.Cast(enemy, IsPacketCastEnabled));
         }
 
         private void CastW()
@@ -113,6 +131,9 @@ namespace EasyAssemblies.Champions
             var attacker = HeroManager.Enemies.First(x => x.NetworkId == sender.NetworkId);
             foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(E.Range, false)))
             {
+                if (!MenuService.BoolLinks["Auto_e_" + ally.ChampionName].Value)
+                    continue;
+
                 var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).Normalized() * ally.Distance(args.End);
                 if (detectRange.Distance(ally.ServerPosition) > ally.AttackRange - ally.BoundingRadius)
                     continue;
@@ -121,6 +142,12 @@ namespace EasyAssemblies.Champions
                     .Where(spell => spell.ChampionName == attacker.ChampionName && spell.Slot == attacker.GetSpellSlot(args.SData.Name)).ToList()
                     .ForEach(item => E.CastOnUnit(ally));
             }
+        }
+
+        protected override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            if (MenuService.BoolLinks["Auto_q_gap"].Value && Q.IsReady() && gapcloser.Sender.IsValidTarget(Q.Range) && Q.GetPrediction(gapcloser.Sender).Hitchance >= HitChance.High)
+                Q.Cast(gapcloser.Sender, IsPacketCastEnabled);
         }
     }
 }
