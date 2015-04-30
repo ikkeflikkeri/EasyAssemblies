@@ -104,6 +104,14 @@ namespace EasyAssemblies.Champions
             if (MenuService.BoolLinks["Auto_r"].Value && RStacks < MenuService.SliderLinks["Auto_max_r_stacks"].Value.Value) CastR();
         }
 
+        protected override void Update()
+        {
+            if (W.Level > 1) W.Range = 110 + W.Level * 20;
+            if (R.Level > 1) R.Range = 900 + R.Level * 300;
+
+            if (MenuService.BoolLinks["Auto_r_killsteal"].Value) CastRKillsteal();
+        }
+
         private void CastQ()
         {
             if (!Q.IsReady())
@@ -147,6 +155,19 @@ namespace EasyAssemblies.Champions
 
             if (R.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
                 R.Cast(target, IsPacketCastEnabled);
+        }
+
+        private void CastRKillsteal()
+        {
+            if (!R.IsReady())
+                return;
+
+            HeroManager.Enemies
+                .Where(enemy => enemy.IsValidTarget(R.Range))
+                .Where(enemy => HealthPrediction.GetHealthPrediction(enemy, (int)R.Delay * 1000) < DrawDamage(enemy))
+                .Where(enemy => HealthPrediction.GetHealthPrediction(enemy, (int)R.Delay * 1000) > 0)
+                .Where(enemy => R.GetPrediction(enemy).Hitchance >= HitChance.VeryHigh).ToList()
+                .ForEach(enemy => R.Cast(enemy, IsPacketCastEnabled));
         }
 
         private float DrawDamage(Obj_AI_Hero hero)
