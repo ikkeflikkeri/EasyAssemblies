@@ -129,6 +129,12 @@ namespace EasyAssemblies.Champions
         {
             if (!W.IsReady())
                 return;
+
+            var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
+            if (!target.IsValidTarget(W.Range))
+                return;
+
+            W.Cast(IsPacketCastEnabled);
         }
 
         private void CastE()
