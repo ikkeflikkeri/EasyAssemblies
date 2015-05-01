@@ -31,7 +31,7 @@ namespace EasyAssemblies.Champions
             R = new Spell(SpellSlot.R);
 
             W.SetSkillshot(0.6f, 60f, 3300f, true, SkillshotType.SkillshotLine);
-            E.SetSkillshot(0.9f, 40f, 1750f, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(1.0f, 40f, 1750f, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.6f, 140f, 1700f, false, SkillshotType.SkillshotLine);
         }
 
