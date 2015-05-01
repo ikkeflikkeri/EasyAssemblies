@@ -169,6 +169,7 @@ namespace EasyAssemblies.Data
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Zed", Slot = SpellSlot.R });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Ziggs", Slot = SpellSlot.W });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Ziggs", Slot = SpellSlot.E });
+            DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Zyra", Slot = SpellSlot.Q });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Zyra", Slot = SpellSlot.E });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Zyra", Slot = SpellSlot.R });
         }
