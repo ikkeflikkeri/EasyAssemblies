@@ -24,7 +24,7 @@ namespace EasyAssemblies.Services
             SliderLinks = new Dictionary<string, MenuWrapper.SliderLink>();
             StringListLinks = new Dictionary<string, MenuWrapper.StringListLink>();
 
-            _menu = new MenuWrapper("Easy" + ObjectManager.Player.ChampionName);
+            _menu = new MenuWrapper("EasyAssemblies - " + ObjectManager.Player.ChampionName);
         }
 
         public static void AddSubMenu(string title)
