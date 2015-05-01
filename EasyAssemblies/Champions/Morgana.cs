@@ -20,7 +20,7 @@ namespace EasyAssemblies.Champions
             E = new Spell(SpellSlot.E, 750f);
             R = new Spell(SpellSlot.R, 600f);
 
-            Q.SetSkillshot(0.25f, 72f, 1200f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 80f, 1200f, true, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.25f, 175f, 1200f, false, SkillshotType.SkillshotCircle);
         }
 
