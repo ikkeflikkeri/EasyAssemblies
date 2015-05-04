@@ -123,22 +123,32 @@ namespace EasyAssemblies.Champions
 
         protected override void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!E.IsReady() || !sender.IsEnemy)
+            if (!E.IsReady() || Player.Type != sender.Type || !sender.IsEnemy)
                 return;
 
             var attacker = HeroManager.Enemies.First(x => x.NetworkId == sender.NetworkId);
-            foreach (var ally in HeroManager.Enemies.Concat(new[] { Player }).ToList().Where(x => x.IsValidTarget(E.Range, false)))
+            foreach (var ally in HeroManager.Enemies.Concat(new[] {Player}).ToList().Where(x => x.IsValidTarget(E.Range, false)).OrderBy(TargetSelector.GetPriority))
             {
                 if (!MenuService.BoolLinks["Auto_e_" + ally.ChampionName].Value)
                     continue;
 
-                var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).Normalized() * ally.Distance(args.End);
-                if (detectRange.Distance(ally.ServerPosition) > ally.AttackRange - ally.BoundingRadius)
-                    continue;
+                var spell = SpellDatabase.DangerousSpells.FirstOrDefault(x => x.ChampionName == attacker.ChampionName && x.Slot == attacker.GetSpellSlot(args.SData.Name));
 
-                SpellDatabase.DangerousSpells
-                    .Where(spell => spell.ChampionName == attacker.ChampionName && spell.Slot == attacker.GetSpellSlot(args.SData.Name)).ToList()
-                    .ForEach(item => E.CastOnUnit(ally));
+                if (spell != null)
+                {
+                    if (spell.Type == SpellType.Targeted)
+                    {
+                        if (args.Target.IsAlly) E.CastOnUnit(args.Target as Obj_AI_Base, IsPacketCastEnabled);
+                    }
+                    else
+                    {
+                        var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).Normalized()*ally.Distance(args.End);
+                        if (detectRange.Distance(ally.ServerPosition) > ally.AttackRange - ally.BoundingRadius)
+                            continue;
+
+                        E.CastOnUnit(ally, IsPacketCastEnabled);
+                    }
+                }
             }
         }
 
