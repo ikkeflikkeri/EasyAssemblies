@@ -22,6 +22,7 @@ namespace EasyAssemblies.Services
                 case "KogMaw": champion = new KogMaw(); break;
                 case "Morgana": champion = new Morgana(); break;
                 case "Xerath": champion = new Xerath(); break;
+                case "Graves": champion = new Graves(); break;
             }
 
             if (champion != null)
