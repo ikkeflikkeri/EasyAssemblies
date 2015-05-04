@@ -3,7 +3,6 @@ using System.Linq;
 using EasyAssemblies.Services;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
 
 namespace EasyAssemblies.Champions
 {
