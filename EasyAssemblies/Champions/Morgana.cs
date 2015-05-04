@@ -20,7 +20,7 @@ namespace EasyAssemblies.Champions
             E = new Spell(SpellSlot.E, 750f);
             R = new Spell(SpellSlot.R, 600f);
 
-            Q.SetSkillshot(0.25f, 80f, 1200f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 75f, 1200f, true, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.25f, 175f, 1200f, false, SkillshotType.SkillshotCircle);
         }
 
@@ -47,8 +47,6 @@ namespace EasyAssemblies.Champions
             MenuService.AddBool("Drawing_w", "W Range", true);
             MenuService.AddBool("Drawing_e", "E Range", true);
             MenuService.AddBool("Drawing_r", "R Range", true);
-
-            MenuService.AddSubMenu("Misc");
 
             MenuService.End();
         }
