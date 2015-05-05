@@ -39,13 +39,13 @@ namespace EasyAssemblies.Champions
             MenuService.AddBool("Combo_w", "Use W", true);
 
             MenuService.AddSubMenu("Harass");
-            MenuService.AddBool("Harass_q", "Use Q", true);
-            MenuService.AddBool("Harass_w", "Use W", true);
+            MenuService.AddBool("Harass_q", "Use Q", false);
+            MenuService.AddBool("Harass_w", "Use W", false);
 
             MenuService.AddSubMenu("Auto");
             MenuService.AddBool("Auto_q", "Use Q", false);
             MenuService.AddBool("Auto_w", "Use W", false);
-            MenuService.AddBool("Auto_r", "Use R", false);
+            MenuService.AddBool("Auto_r", "Use R", true);
 
             MenuService.AddSubMenu("Drawing");
             MenuService.AddBool("Drawing_q", "Q Range", true);
