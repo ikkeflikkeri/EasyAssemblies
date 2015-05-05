@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Champions\Champion.cs" />
+    <Compile Include="Champions\Ezreal.cs" />
     <Compile Include="Champions\Graves.cs" />
     <Compile Include="Champions\Jinx.cs" />
     <Compile Include="Champions\KogMaw.cs" />

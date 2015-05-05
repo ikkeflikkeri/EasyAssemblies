@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using EasyAssemblies.Services;
 using LeagueSharp;
@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 
 namespace EasyAssemblies.Champions
 {
-    class Graves : Champion
+    class Ezreal : Champion
     {
         private Spell Q { get; set; }
         private Spell W { get; set; }
@@ -20,14 +20,14 @@ namespace EasyAssemblies.Champions
 
         protected override void InitializeSpells()
         {
-            Q = new Spell(SpellSlot.Q, 930f);
-            W = new Spell(SpellSlot.W, 950f);
-            E = new Spell(SpellSlot.E, 425f);
-            R = new Spell(SpellSlot.R, 1800f);
+            Q = new Spell(SpellSlot.Q, 1150f);
+            W = new Spell(SpellSlot.W, 1000f);
+            E = new Spell(SpellSlot.E, 475f);
+            R = new Spell(SpellSlot.R);
 
-            Q.SetSkillshot(0.25f, 15f * 2 * (float)Math.PI / 180, 2000f, false, SkillshotType.SkillshotCone);
-            W.SetSkillshot(0.25f, 250f, 1650f, false, SkillshotType.SkillshotCircle);
-            R.SetSkillshot(0.25f, 100f, 2100f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 60f, 2000f, true, SkillshotType.SkillshotLine);
+            W.SetSkillshot(0.25f, 80f, 1600f, false, SkillshotType.SkillshotLine);
+            R.SetSkillshot(1f, 160f, 2000f, false, SkillshotType.SkillshotLine);
         }
 
         protected override void InitializeMenu()
@@ -39,13 +39,15 @@ namespace EasyAssemblies.Champions
             MenuService.AddBool("Combo_w", "Use W", true);
 
             MenuService.AddSubMenu("Harass");
-            MenuService.AddBool("Harass_q", "Use Q", false);
+            MenuService.AddBool("Harass_q", "Use Q", true);
             MenuService.AddBool("Harass_w", "Use W", false);
 
             MenuService.AddSubMenu("Auto");
-            MenuService.AddBool("Auto_q", "Use Q", false);
+            MenuService.AddBool("Auto_q", "Use Q", true);
             MenuService.AddBool("Auto_w", "Use W", false);
             MenuService.AddBool("Auto_r", "Use R", true);
+            MenuService.AddSlider("Auto_r_min_range", "Min R range", 1000, 0, 1500);
+            MenuService.AddSlider("Auto_r_max_range", "Max R range", 3000, 1500, 5000);
 
             MenuService.AddSubMenu("Drawing");
             MenuService.AddBool("Drawing_q", "Q Range", true);
@@ -71,14 +73,12 @@ namespace EasyAssemblies.Champions
         {
             if (MenuService.BoolLinks["Combo_q"].Value) CastQ();
             if (MenuService.BoolLinks["Combo_w"].Value) CastW();
-
         }
 
         protected override void Harass()
         {
             if (MenuService.BoolLinks["Harass_q"].Value) CastQ();
             if (MenuService.BoolLinks["Harass_w"].Value) CastW();
-
         }
 
         protected override void Auto()
@@ -123,38 +123,28 @@ namespace EasyAssemblies.Champions
             if (!R.IsReady())
                 return;
 
-            foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(R.Range) && enemy.IsMoving))
+            var minRange = MenuService.SliderLinks["Auto_r_min_range"].Value.Value;
+            var maxRange = MenuService.SliderLinks["Auto_r_max_range"].Value.Value;
+
+            var targets = HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(maxRange) && enemy.Distance(Player) >= minRange);
+
+            foreach (var target in targets)
             {
-                var predictedHealth = HealthPrediction.GetHealthPrediction(target, (int) (R.Delay + (Player.Distance(target)/R.Speed)*1000));
-                if (predictedHealth < 0 || predictedHealth > R.GetDamage(target))
+                var predictedHealth = HealthPrediction.GetHealthPrediction(target, (int)(R.Delay + (Player.Distance(target) / R.Speed) * 1000));
+
+                if (DrawDamage(target) < predictedHealth || predictedHealth <= 0)
                     continue;
 
-                var prediction = R.GetPrediction(target);
-                if (prediction.Hitchance < HitChance.High)
-                    continue;
-
-                var collision = prediction.CollisionObjects.Any(x => x.IsEnemy && x.Distance(Player) < target.Distance(Player) - 750f);
-                if (!collision)
-                    R.Cast(target, IsPacketCastEnabled);
+                R.Cast(target, IsPacketCastEnabled);
             }
         }
 
         private float DrawDamage(Obj_AI_Hero hero)
         {
-            return R.GetDamage(hero);
+            float reduction = 1f - ((R.GetCollision(Player.Position.To2D(), new List<SharpDX.Vector2> { hero.Position.To2D() }).Count) / 10f);
+            reduction = (reduction < 0.3f ? 0.3f : reduction);
+
+            return R.GetDamage(hero) * reduction;
         }
-
-        /*private static float DistanceFromLine(Vector2 p, Vector2 v, Vector2 w)
-        {
-            var l2 = (w - v).LengthSquared();
-            if (Math.Abs(l2) < 0.0) return Vector2.Distance(p, v);
-
-            var t = Vector2.Dot(p - v, w - v) / l2;
-            if (t < 0.0) return Vector2.Distance(p, v);
-            if (t > 1.0) return Vector2.Distance(p, w);
-
-            var projection = v + t * (w - v);
-            return Vector2.Distance(p, projection);
-        }*/
     }
 }
