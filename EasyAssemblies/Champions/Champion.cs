@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using EasyAssemblies.Services;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -30,21 +29,7 @@ namespace EasyAssemblies.Champions
             Spellbook.OnCastSpell += OnCastSpell;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
 
-            Game.PrintChat("EasyAssemblies - " + Player.ChampionName + " loaded!");
-
-            try
-
-            {
-                using (var wc = new WebClient())
-                {
-                    wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                    wc.UploadString("http://niels-wouters.be/LeagueSharp/stats.php", "assembly=" + Player.ChampionName);
-                }
-            }
-            catch (Exception ex)
-            {
-                Game.PrintChat(ex.Message);
-            }
+            Console.WriteLine("EasyAssemblies - " + Player.ChampionName + " loaded!");
         }
 
         private void OnUpdate(EventArgs args)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EasyAssemblies.Services;
 using LeagueSharp;
@@ -141,9 +142,7 @@ namespace EasyAssemblies.Champions
 
         private float DrawDamage(Obj_AI_Hero hero)
         {
-            float reduction = 1f - ((R.GetCollision(Player.Position.To2D(), new List<SharpDX.Vector2> { hero.Position.To2D() }).Count) / 10f);
-            reduction = (reduction < 0.3f ? 0.3f : reduction);
-
+            var reduction = Math.Max(1f - ((R.GetCollision(Player.Position.To2D(), new List<SharpDX.Vector2> { hero.Position.To2D() }).Count) / 10f), 0.3f);
             return R.GetDamage(hero) * reduction;
         }
     }

@@ -132,21 +132,23 @@ namespace EasyAssemblies.Champions
 
                 var spell = SpellDatabase.DangerousSpells.FirstOrDefault(x => x.ChampionName == attacker.ChampionName && x.Slot == attacker.GetSpellSlot(args.SData.Name));
 
-                if (spell != null)
+                if (spell == null) continue;
+
+                switch (spell.Type)
                 {
-                    if (spell.Type == SpellType.Targeted)
-                    {
-                        if (args.Target.IsAlly) E.CastOnUnit(args.Target as Obj_AI_Base, IsPacketCastEnabled);
-                    }
-                    else
-                    {
-                        var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).Normalized()*ally.Distance(args.End);
+                    case SpellType.Unknown:
+                        var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).Normalized() * ally.Distance(args.End);
                         if (detectRange.Distance(ally.ServerPosition) > ally.AttackRange - ally.BoundingRadius)
                             continue;
 
                         E.CastOnUnit(ally, IsPacketCastEnabled);
-                    }
+                        break;
+
+                    case SpellType.Targeted:
+                        if (args.Target.IsAlly) E.CastOnUnit(args.Target as Obj_AI_Base, IsPacketCastEnabled);
+                        break;
                 }
+                
             }
         }
 
