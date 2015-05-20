@@ -40,7 +40,7 @@ namespace EasyAssemblies.Champions
             MenuService.AddBool("Auto_q_stun", "Use Q on stunned enemies", true);
             MenuService.AddBool("Auto_q_gap", "Use Q on gapcloser", true);
             MenuService.AddBool("Auto_w", "Use W", true);
-            HeroManager.Enemies.Concat(new[] {Player}).ToList().ForEach(hero => MenuService.AddBool("Auto_e_" + hero.ChampionName, "Use E on " + hero.ChampionName, true));
+            HeroManager.Allies.ToList().ForEach(hero => MenuService.AddBool("Auto_e_" + hero.ChampionName, "Use E on " + hero.ChampionName, true));
 
             MenuService.AddSubMenu("Drawing");
             MenuService.AddBool("Drawing_q", "Q Range", true);
@@ -125,7 +125,7 @@ namespace EasyAssemblies.Champions
                 return;
 
             var attacker = HeroManager.Enemies.First(x => x.NetworkId == sender.NetworkId);
-            foreach (var ally in HeroManager.Enemies.Concat(new[] {Player}).ToList().Where(x => x.IsValidTarget(E.Range, false)).OrderBy(TargetSelector.GetPriority))
+            foreach (var ally in HeroManager.Allies.Concat(new[] {Player}).ToList().Where(x => x.IsValidTarget(E.Range, false)).OrderBy(TargetSelector.GetPriority))
             {
                 if (!MenuService.BoolLinks["Auto_e_" + ally.ChampionName].Value)
                     continue;
