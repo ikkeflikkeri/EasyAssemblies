@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using EasyAssemblies.Services;
 using LeagueSharp;
@@ -16,7 +17,7 @@ namespace EasyAssemblies.Champions
 
         protected override void InitializeSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1150f);
+            Q = new Spell(SpellSlot.Q, 1200f);
             W = new Spell(SpellSlot.W, 1000f);
             E = new Spell(SpellSlot.E, 475f);
             R = new Spell(SpellSlot.R);
@@ -51,6 +52,7 @@ namespace EasyAssemblies.Champions
             MenuService.AddBool("Drawing_e", "E Range", true);
             MenuService.AddBool("Drawing_r", "R Range", true);
             MenuService.AddBool("Drawing_r_damage", "R Damage Indicator", true);
+            MenuService.AddBool("Drawing_r_position", "R Position Indicator", true);
 
             MenuService.End();
         }
@@ -63,6 +65,21 @@ namespace EasyAssemblies.Champions
             if (MenuService.BoolLinks["Drawing_r"].Value) DrawingService.RenderSkillshotRange(R);
 
             DrawingService.RenderDamageIndicator(MenuService.BoolLinks["Drawing_r_damage"].Value);
+
+            if (MenuService.BoolLinks["Drawing_r_position"].Value)
+            {
+                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget()))
+                {
+                    var color = Color.FromArgb(100, 255, 255, 0);
+                    var prediction = R.GetPrediction(enemy);
+                    var textPosition = Drawing.WorldToScreen(prediction.CastPosition);
+                    var enemyPosition = Drawing.WorldToScreen(enemy.Position);
+
+                    Render.Circle.DrawCircle(prediction.CastPosition, 50f, color);
+                    Drawing.DrawLine(enemyPosition, textPosition, 2f, color);
+                    Drawing.DrawText(textPosition.X, textPosition.Y, color, enemy.ChampionName);
+                } 
+            }
         }
 
         protected override void Combo()
@@ -97,7 +114,7 @@ namespace EasyAssemblies.Champions
             if (!target.IsValidTarget(Q.Range) || !target.IsMoving)
                 return;
 
-            if (Q.GetPrediction(target).Hitchance < HitChance.VeryHigh)
+            if (Q.GetPrediction(target).Hitchance >= HitChance.High)
                 Q.Cast(target, IsPacketCastEnabled);
         }
 
@@ -110,7 +127,7 @@ namespace EasyAssemblies.Champions
             if (!target.IsValidTarget(W.Range) || !target.IsMoving)
                 return;
 
-            if (W.GetPrediction(target).Hitchance < HitChance.VeryHigh)
+            if (W.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
                 W.Cast(target, IsPacketCastEnabled);
         }
 

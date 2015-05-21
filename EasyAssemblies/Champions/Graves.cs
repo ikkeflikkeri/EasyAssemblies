@@ -96,7 +96,7 @@ namespace EasyAssemblies.Champions
             if (!target.IsValidTarget(Q.Range) || !target.IsMoving)
                 return;
 
-            if (Q.GetPrediction(target).Hitchance < HitChance.VeryHigh)
+            if (Q.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
                 Q.Cast(target, IsPacketCastEnabled);
         }
 
@@ -109,7 +109,7 @@ namespace EasyAssemblies.Champions
             if (!target.IsValidTarget(W.Range) || !target.IsMoving)
                 return;
 
-            if (W.GetPrediction(target).Hitchance < HitChance.VeryHigh)
+            if (W.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
                 W.Cast(target, IsPacketCastEnabled);
         }
 
