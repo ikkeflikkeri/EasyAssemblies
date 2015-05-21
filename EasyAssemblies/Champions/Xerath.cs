@@ -8,11 +8,7 @@ namespace EasyAssemblies.Champions
 {
     class Xerath : Champion
     {
-        private Spell Q { get; set; }
-        private Spell W { get; set; }
         private Spell WCenter { get; set; }
-        private Spell E { get; set; }
-        private Spell R { get; set; }
 
         private Items.Item _blueTrinket1;
         private Items.Item _blueTrinket2;

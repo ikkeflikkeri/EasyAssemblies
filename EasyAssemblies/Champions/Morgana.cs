@@ -8,11 +8,6 @@ namespace EasyAssemblies.Champions
 {
     class Morgana : Champion
     {
-        private Spell Q { get; set; }
-        private Spell W { get; set; }
-        private Spell E { get; set; }
-        private Spell R { get; set; }
-
         protected override void InitializeSpells()
         {
             Q = new Spell(SpellSlot.Q, 1175f);

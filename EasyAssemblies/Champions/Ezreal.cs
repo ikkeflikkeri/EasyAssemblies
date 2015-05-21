@@ -9,11 +9,6 @@ namespace EasyAssemblies.Champions
 {
     class Ezreal : Champion
     {
-        private Spell Q { get; set; }
-        private Spell W { get; set; }
-        private Spell E { get; set; }
-        private Spell R { get; set; }
-
         protected override void Initialize()
         {
             DrawingService.SetDamageIndicator(DrawDamage);

@@ -7,11 +7,6 @@ namespace EasyAssemblies.Champions
 {
     class KogMaw : Champion
     {
-        private Spell Q { get; set; }
-        private Spell W { get; set; }
-        private Spell E { get; set; }
-        private Spell R { get; set; }
-
         private int RStacks
         {
             get { return Player.Buffs.Where(buff => buff.DisplayName == "KogMawLivingArtillery").Select(buff => buff.Count).FirstOrDefault(); }

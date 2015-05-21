@@ -10,6 +10,11 @@ namespace EasyAssemblies.Champions
     {
         protected Obj_AI_Hero Player;
 
+        protected Spell Q { get; set; }
+        protected Spell W { get; set; }
+        protected Spell E { get; set; }
+        protected Spell R { get; set; }
+
         private const int UpdateTick = 1000 / 20;
         private int _lastUpdateTick;
 

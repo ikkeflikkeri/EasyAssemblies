@@ -8,11 +8,6 @@ namespace EasyAssemblies.Champions
 {
     class Jinx : Champion
     {
-        private Spell Q { get; set; }
-        private Spell W { get; set; }
-        private Spell E { get; set; }
-        private Spell R { get; set; }
-
         private bool IsUsingRockets
         {
             get { return Player.AttackRange > 525; }
