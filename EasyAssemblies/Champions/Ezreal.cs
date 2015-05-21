@@ -114,7 +114,7 @@ namespace EasyAssemblies.Champions
             if (!target.IsValidTarget(Q.Range) || !target.IsMoving)
                 return;
 
-            if (Q.GetPrediction(target).Hitchance >= HitChance.High)
+            if (Q.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
                 Q.Cast(target, IsPacketCastEnabled);
         }
 
