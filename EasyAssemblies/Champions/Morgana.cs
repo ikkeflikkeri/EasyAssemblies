@@ -43,6 +43,9 @@ namespace EasyAssemblies.Champions
             MenuService.AddBool("Drawing_e", "E Range", true);
             MenuService.AddBool("Drawing_r", "R Range", true);
 
+            MenuService.AddSubMenu("Misc");
+            MenuService.AddKeyBind("Misc_q", "Use Q key", 'T', KeyBindType.Press);
+
             MenuService.End();
         }
 
@@ -73,6 +76,7 @@ namespace EasyAssemblies.Champions
         {
             CastQAuto();
             if (MenuService.BoolLinks["Auto_w"].Value) CastW();
+            if (MenuService.KeyLinks["Misc_q"].Value.Active) CastQ();
         }
 
         private void CastQ()

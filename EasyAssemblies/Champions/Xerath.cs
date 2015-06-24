@@ -26,8 +26,8 @@ namespace EasyAssemblies.Champions
         {
             DrawingService.SetDamageIndicator(DrawDamage);
 
-            _blueTrinket1 = ItemData.Scrying_Orb_Trinket.GetItem();
-            _blueTrinket2 = ItemData.Farsight_Orb_Trinket.GetItem();
+            _blueTrinket1 = LeagueSharp.Common.Data.ItemData.Scrying_Orb_Trinket.GetItem();
+            _blueTrinket2 = LeagueSharp.Common.Data.ItemData.Farsight_Orb_Trinket.GetItem();
         }
 
         protected override void InitializeSpells()

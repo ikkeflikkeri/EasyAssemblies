@@ -35,7 +35,6 @@ namespace EasyAssemblies.Data
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Annie", Slot = SpellSlot.Q, Type = SpellType.Targeted });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Annie", Slot = SpellSlot.W, Type = SpellType.Unknown });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Annie", Slot = SpellSlot.R, Type = SpellType.Unknown });
-            DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Ashe", Slot = SpellSlot.W, Type = SpellType.Unknown });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Ashe", Slot = SpellSlot.R, Type = SpellType.Unknown });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Azir", Slot = SpellSlot.E, Type = SpellType.Unknown });
             DangerousSpells.Add(new SpellDatabaseItem { ChampionName = "Azir", Slot = SpellSlot.R, Type = SpellType.Unknown });
